@@ -1,20 +1,23 @@
 import React from "react";
 
 export class Appointment extends React.Component {
+
     render() {
-        const {rdv, isFetching} = this.props;
+        const {Rdv, isFetching} = this.props;
 
         if(isFetching) {
             return(<div><i className="fas fa-spinner fa-spin"/></div>);
         }
 
-        if(null === rdv){
+        if(null === Rdv){
             return (<div>No Such Appointment</div>);
         }
         return (
             <div>
-                {rdv.patient}
+                {Rdv.result}
             </div>
         )
     }
 }
+
+export default Appointment;

@@ -1,7 +1,7 @@
 import {RDV_ERROR, RDV_RECEIVED, RDV_REQUEST, RDV_UNLOAD} from "../actions/constants";
 
 export default (state = {
-  post: null,
+  Rdv: null,
   isFetching: false
 }, action) => {
   switch (action.type) {
@@ -13,14 +13,20 @@ export default (state = {
     case RDV_RECEIVED:
       return {
         ...state,
-        post: action.data,
+        Rdv: action.data,
         isFetching: false
       };
     case RDV_ERROR:
       return {
-        ...state,
+        ...state, 
         isFetching: false
       };
+    case RDV_UNLOAD:
+      return {
+        ...state,
+        isFetching: false,
+        Rdv: null
+      }
     default:
       return state;
   }

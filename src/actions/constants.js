@@ -6,3 +6,4 @@ export const RDV_LIST_ADD = 'RDV_LIST_ADD';
 export const RDV_REQUEST = 'RDV_REQUEST';
 export const RDV_RECEIVED = 'RDV_RECEIVED';
 export const RDV_ERROR = 'RDV_ERROR';
+export const RDV_UNLOAD = 'RDV_UNLOAD';

@@ -29,7 +29,7 @@ import {
         return {
           ...state,
           isFetching: false,
-          posts: null
+          rdv: null
         };
       case RDV_LIST_ADD:
         state = {

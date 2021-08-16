@@ -1,5 +1,5 @@
-import {requests} from "../agent";
-import { RDV_ERROR, RDV_LIST_ADD, RDV_LIST_ERROR, RDV_LIST_RECEIVED, RDV_LIST_REQUEST, RDV_RECEIVED, RDV_REQUEST } from "./constants";
+import { requests } from "../agent";
+import { RDV_ERROR, RDV_LIST_ADD, RDV_LIST_ERROR, RDV_LIST_RECEIVED, RDV_LIST_REQUEST, RDV_RECEIVED, RDV_REQUEST, RDV_UNLOAD } from "./constants";
 
 
 export const RdvListRequest = () => ({
@@ -20,7 +20,7 @@ export const RdvListFetch = () => {
     return (dispatch) => {
         dispatch(RdvListRequest());
         return requests.get('/rdvs').then(response => dispatch(RdvListRecieved(response)))
-        .catch(error => dispatch(RdvListFetch(error)));
+        .catch(error => dispatch(RdvListError(error)));
     }
 };
 
@@ -36,6 +36,10 @@ export const RdvError = (error) => ({
 export const RdvRecieved = (data) => ({
     type: RDV_RECEIVED,
     data
+});
+
+export const RdvUnload = (data) => ({
+    type: RDV_UNLOAD,
 });
 
 export const RdvFetch = (id) => {

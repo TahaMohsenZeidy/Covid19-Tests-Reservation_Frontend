@@ -1,27 +1,30 @@
 import React from 'react';
-import {RdvFetch} from '../actions/actions.js';
+import Appointment from './Appointment';
+import {RdvFetch, RdvUnload} from '../actions/actions.js';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => ({
-  ...state.rdv
+  ...state.Appointment
 });
 
 const mapDispatchToProps = {
-  RdvFetch
+  RdvFetch,
+  RdvUnload
 }
 
 class AppointmentContainer extends React.Component {
+
   componentDidMount() {
-    console.log(this.props.match.params.id);
     this.props.RdvFetch(this.props.match.params.id);
   } 
 
+  componentWillUnmount() {
+    this.props.RdvUnload();
+  }
+
   render(){
-      return(
-          <div>
-              Hello From RDV !
-          </div>
-      )
+    const {isFetching, Rdv} = this.props;
+    return(<Appointment isFetching={isFetching} Rdv={Rdv} />);
   }
 }
 
