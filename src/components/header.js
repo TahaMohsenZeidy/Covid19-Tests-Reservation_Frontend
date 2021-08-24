@@ -14,8 +14,8 @@ export default class Header extends React.Component {
 
     return (
       <span>
-        Hello {userData.name},&nbsp;
-        <button className="btn btn-link btn-sm" href="#" onClick={logout}>Logout</button>
+        Hello {userData.firstname} {userData.lastname} &nbsp;
+        <button className="btn btn-dark" href="#" onClick={logout}>Logout</button>
       </span>
     );
   }
@@ -26,7 +26,7 @@ export default class Header extends React.Component {
     return (
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <Link to="/" className="navbar-brand">
-          React Rdv
+          Appointments List
         </Link>
 
         <ul className="navbar-nav mr-auto">

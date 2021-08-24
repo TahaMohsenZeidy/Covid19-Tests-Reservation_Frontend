@@ -1,5 +1,6 @@
+import { SubmissionError } from "redux-form";
 import { requests } from "../agent";
-import { RDV_ERROR, RDV_LIST_ADD, RDV_LIST_ERROR, RDV_LIST_RECEIVED, RDV_LIST_REQUEST, RDV_RECEIVED, RDV_REQUEST, RDV_UNLOAD } from "./constants";
+import { RDV_ERROR, RDV_LIST_ADD, RDV_LIST_ERROR, RDV_LIST_RECEIVED, RDV_LIST_REQUEST, RDV_RECEIVED, RDV_REQUEST, RDV_UNLOAD, USER_LOGIN_SUCCESS, USER_LOGOUT, USER_PROFILE_ERROR, USER_PROFILE_RECEIVED, USER_PROFILE_REQUEST, USER_SET_ID } from "./constants";
 
 
 export const RdvListRequest = () => ({
@@ -57,3 +58,64 @@ export const RdvListAdd = () => ({
         date: 'a newly added appointment'
     }
 });
+
+export const userLoginSuccess = (token, userId) => {
+  return {
+    type: USER_LOGIN_SUCCESS,
+    token,
+    userId
+  }
+};
+
+export const userLoginAttempt = (email, identifier) => {
+    return (dispatch) => {
+      return requests.post('/login_check', {email, identifier}, false).then(
+        response => dispatch(userLoginSuccess(response.token, response.userId))
+      ).catch(() => {
+        throw new SubmissionError({
+            _error: 'email or identifer is invalid'
+          })
+      });
+    }
+  };
+
+  export const userProfileRequest = () => {
+    return {
+      type: USER_PROFILE_REQUEST
+    }
+  };
+
+  export const userProfileReceived = (userId, userData) => {
+    return {
+      type: USER_PROFILE_RECEIVED,
+      userData,
+      userId
+    }
+  };
+
+  export const userProfileError = () => {
+    return {
+      type: USER_PROFILE_ERROR,
+    }
+  };
+
+  export const userSetId = (userId) => {
+    return {
+      type: USER_SET_ID,
+      userId
+    }
+  };
+  
+  export const userLogout = () => {
+    return {
+      type: USER_LOGOUT
+    }
+  };
+
+  export const userProfileFetch = (userId) => {
+    return (dispatch) => {
+      dispatch(userProfileRequest());
+      return requests.get(`/patients/${userId}`, true).then(response => dispatch(userProfileReceived(userId, response)))
+      .catch(error => dispatch(RdvError(error)));
+    }
+  };
