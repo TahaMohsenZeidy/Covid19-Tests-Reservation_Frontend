@@ -12,7 +12,15 @@ class AppointmentList extends React.Component {
         }
 
         if(null === rdv || 0 === rdv.length){
-            return (<div>No Appointments booked.</div>)
+            return (
+            <div class="card m-3">
+                <div className="mx-auto m-4">
+                    <img src={require('./images/no_app.PNG')} />
+                </div>
+                <div class="card-body text-center">
+                    No Appointments booked for the moment, If you want to book a new Appointment You need to Have an Account.
+                </div>
+            </div>)
         }
         return (
             <div>

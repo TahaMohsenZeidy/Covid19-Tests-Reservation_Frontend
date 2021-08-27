@@ -13,13 +13,16 @@ const mapDispatchToProps = {
 
 class AppointmentListContainer extends React.Component {
 
+    constructor(props) {
+        super(props);
+    }
+
     componentDidMount() {
-        this.props.RdvListFetch();
+        this.props.RdvListFetch(window.localStorage.getItem('userId'));
     }
 
     render() {
         const {rdv, isFetching} = this.props;
-        
         return (<AppointmentList rdv = {rdv} isFetching = {isFetching} />);
     }
 }

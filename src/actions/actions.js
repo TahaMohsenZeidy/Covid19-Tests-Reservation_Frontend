@@ -18,10 +18,10 @@ export const RdvListRecieved = (data) => ({
     data
 });
 
-export const RdvListFetch = () => {
+export const RdvListFetch = (id) => {
     return (dispatch) => {
         dispatch(RdvListRequest());
-        return requests.get('/rdvs').then(response => dispatch(RdvListRecieved(response)))
+        return requests.get(`/patients/${id}/rdvs`).then(response => dispatch(RdvListRecieved(response)))
         .catch(error => dispatch(RdvListError(error)));
     }
 };

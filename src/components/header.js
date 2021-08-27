@@ -46,7 +46,7 @@ export default class Header extends React.Component {
             (
               <li className="nav-item">
                 <Link to="/blog-post-form" className="link-primary">
-                  Add New
+                  Add Appointment
                 </Link>
               </li>
             )

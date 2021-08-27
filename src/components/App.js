@@ -8,8 +8,6 @@ import {requests} from "../agent";
 import {connect} from "react-redux";
 import { userProfileFetch, userSetId, userLogout } from "../actions/actions";
 import RegistrationContainer from "./RegistrationContainer";
-
-// hedhy zedt'ha tawa
 import WelcomeContainer from './WelcomeContainer';
 
 const mapStateToProps = state => ({
@@ -50,20 +48,19 @@ class App extends React.Component {
     }
 
     render() {
-        const {isAuthenticated, userData, userLogout, history} = this.props;
-        return (
-            <div>
-                <Header isAuthenticated={isAuthenticated} userData={userData} logout={userLogout} histo={history.location.pathname}/>
-                <Switch>
-                    {/* Added new */}
-                    <Route path="/welcome" component={WelcomeContainer}/>
-                    <Route path="/login" component={LoginForm}/>
-                    <Route path="/rdvs/:id" component={AppointmentContainer}/>
-                    <Route path="/register" component={RegistrationContainer}/>
-                    <Route path="/" component={AppointmentListContainer}/>
-                </Switch>
-            </div>
-        )
+      const {isAuthenticated, userData, userLogout, history} = this.props;
+      return (
+          <div>
+              <Header isAuthenticated={isAuthenticated} userData={userData} logout={userLogout} histo={history.location.pathname}/>
+              <Switch>
+                  <Route path="/welcome" component={WelcomeContainer}/>
+                  <Route path="/login" component={LoginForm}/>
+                  <Route path="/rdvs/:id" component={AppointmentContainer}/>
+                  <Route path="/register" component={RegistrationContainer}/>
+                  <Route path="/" component={AppointmentListContainer}/>
+              </Switch>
+          </div>
+      )
     }
 }
 
