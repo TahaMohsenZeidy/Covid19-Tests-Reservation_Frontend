@@ -34,6 +34,9 @@ class LoginForm extends React.Component {
     const {handleSubmit, error} = this.props;
     return (
       <div className="text-center">
+        <div className="mx-auto m-4">
+          <img src={require('./images/login.jpg')} />
+        </div>
         {error && <div className="alert alert-danger">{error}</div>}
         <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
             <div class="form-group">
@@ -44,8 +47,7 @@ class LoginForm extends React.Component {
                 <Field name="identifier" label="Identifier" type="password" component={renderField} />
             </div>
             <div class="form-check  p-3">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1" />
-                <label class="form-check-label">Keep Me Logged In</label>
+              
             </div>
             <button type="submit" class="btn btn-primary">Log In</button>
         </form>

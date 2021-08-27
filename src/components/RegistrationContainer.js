@@ -27,7 +27,7 @@ class RegistrationContainer extends React.Component {
           console.log(this.state.counter);
           this.setState(prevState => ({counter: prevState.counter - 1}));
         },
-        1000
+        500
       )
     }
 

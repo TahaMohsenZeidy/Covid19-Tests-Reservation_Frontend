@@ -9,6 +9,9 @@ import {connect} from "react-redux";
 import { userProfileFetch, userSetId, userLogout } from "../actions/actions";
 import RegistrationContainer from "./RegistrationContainer";
 
+// hedhy zedt'ha tawa
+import WelcomeContainer from './WelcomeContainer';
+
 const mapStateToProps = state => ({
     ...state.auth
   });
@@ -42,18 +45,18 @@ class App extends React.Component {
     componentDidUpdate(prevProps) {
       const { userId, userData, userProfileFetch } = this.props;
       if (prevProps.userId !== userId && userId !== null && userData === null) {
-        console.log(`old user id ${prevProps.userId}`);
-        console.log(`new user id ${userId}`)
         userProfileFetch(userId);
       }
     }
 
     render() {
-        const {isAuthenticated, userData, userLogout} = this.props;
+        const {isAuthenticated, userData, userLogout, history} = this.props;
         return (
             <div>
-                <Header isAuthenticated={isAuthenticated} userData={userData} logout={userLogout}/>
+                <Header isAuthenticated={isAuthenticated} userData={userData} logout={userLogout} histo={history.location.pathname}/>
                 <Switch>
+                    {/* Added new */}
+                    <Route path="/welcome" component={WelcomeContainer}/>
                     <Route path="/login" component={LoginForm}/>
                     <Route path="/rdvs/:id" component={AppointmentContainer}/>
                     <Route path="/register" component={RegistrationContainer}/>
