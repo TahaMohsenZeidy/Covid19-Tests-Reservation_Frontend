@@ -40,12 +40,13 @@ class RegisterForm extends React.Component {
   }
 
   render() {
-    const {handleSubmit, submitting} = this.props;
+    const {handleSubmit, submitting, error} = this.props;
     return (
       <div className="text-center">
         <div className="mx-auto m-4">
           <img src={require('./images/login.jpg')} />
         </div>
+        {error && <div className="alert alert-danger">{error}</div>}
           <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
             <div class="form-row">
               <div class="form-group col-md-6">

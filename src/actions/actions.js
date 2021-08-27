@@ -156,7 +156,10 @@ export const userLoginAttempt = (email, identifier) => {
       return requests.post('/patients', {firstname, lastname, identifier, birthdate, nationality, email, address, gsm, age, gender}, false)
         .then(() => dispatch(userRegisterSuccess()))
         .catch(error => {
-          throw new SubmissionError(parseApiErrors(error));
+          // throw new SubmissionError(parseApiErrors(error));
+          throw new SubmissionError({
+            _error: 'email or identifer is already used, try loggin in instead'
+          })
         });
     }
   };
