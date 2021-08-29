@@ -45,7 +45,7 @@ export default class Header extends React.Component {
             isAuthenticated &&
             (
               <li className="nav-item">
-                <Link to="/blog-post-form" className="link-primary">
+                <Link to="/appointment-form" className="link-primary">
                   Add Appointment
                 </Link>
               </li>

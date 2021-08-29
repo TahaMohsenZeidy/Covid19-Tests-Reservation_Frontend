@@ -1,7 +1,8 @@
 import React from 'react';
 import { Route, Switch } from 'react-router';
 import AppointmentListContainer from './AppointmentListContainer';
-import AppointmentContainer from './AppointmentContainer'
+import AppointmentContainer from './AppointmentContainer';
+import AppointmentForm from './AppointmentForm';
 import Header from './Header';
 import LoginForm from './LoginForm';
 import {requests} from "../agent";
@@ -55,6 +56,7 @@ class App extends React.Component {
               <Switch>
                   <Route path="/welcome" component={WelcomeContainer}/>
                   <Route path="/login" component={LoginForm}/>
+                  <Route path="/appointment-form" component={AppointmentForm}/>
                   <Route path="/rdvs/:id" component={AppointmentContainer}/>
                   <Route path="/register" component={RegistrationContainer}/>
                   <Route path="/" component={AppointmentListContainer}/>
