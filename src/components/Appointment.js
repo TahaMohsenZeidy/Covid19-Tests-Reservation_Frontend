@@ -12,10 +12,9 @@ export class Appointment extends React.Component {
         if(null === Rdv){
             return (<div>No Such Appointment</div>);
         }
-        console.log(Rdv);
         return (
             <div>
-                <h1 class="text-center">{Rdv.result.charAt(0).toUpperCase() + Rdv.result.slice(1)} Test</h1>
+                <h1 class="text-center">{(Rdv.result) ? Rdv.result.charAt(0).toUpperCase() + Rdv.result.slice(1) : "Still Waiting For Result" } Test</h1>
                 <div class="row">
                     <div class="col-sm-6 mt-3">
                         <div class="card">
@@ -61,7 +60,7 @@ export class Appointment extends React.Component {
                     </div>
                 </div>
 
-                <div class="card w-100 mt-4 p-3">
+                <div class="card w-100 mt-4 p-3" style={{display: Rdv.result ? 'block' :'none' }}>
                     <div class="card-img-top d-flex align-items-center bg-light">
                         <div>
                             <QRCode value={Rdv.id.toString()} />

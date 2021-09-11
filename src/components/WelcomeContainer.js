@@ -17,12 +17,13 @@ export default class WelcomeContainer extends React.Component {
     }
     
     onPatientClick(){
-        console.log("patient");
+        console.log("direction patient");
         histo.push("/")
     }
 
     onTesterClick(){
-        console.log("tester");
+        console.log("direction tester");
+        histo.push("/tester")
     }
     render() {
         return (

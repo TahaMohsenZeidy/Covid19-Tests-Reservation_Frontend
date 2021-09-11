@@ -4,7 +4,7 @@ export default (state = {
   token: null,
   userId: null,
   isAuthenticated: false,
-  userData: null
+  userData: null,
 }, action) => {
   switch (action.type) {
     case USER_LOGIN_SUCCESS:
@@ -21,8 +21,6 @@ export default (state = {
         isAuthenticated: true
       };
     case USER_PROFILE_RECEIVED:
-      console.log(state.userId);
-      console.log(action.userId);
       return {
         ...state,
         userData: (state.userId === action.userId && state.userData === null)

@@ -27,7 +27,6 @@ class RegisterForm extends React.Component {
   onSubmit(values) {
     values['gender'] = this.state.gender;
     values['nationality'] = this.state.country;
-    console.log(values);
     return this.props.userRegister(values['firstname'], values['lastname'], values['identifier'], values['birthdate'], values['nationality'], values['email'], values['address'], values['gsm'], Math.floor(values['age']), values['gender'])
       .then(() => {
         this.props.reset();
@@ -35,7 +34,6 @@ class RegisterForm extends React.Component {
   }
 
   onTermsAcceptedClick(e) {
-    console.log(this.state);
     this.setState(prevState => ({termsAccepted: !prevState.termsAccepted}));
   }
 

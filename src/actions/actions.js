@@ -1,7 +1,6 @@
 import { SubmissionError } from "redux-form";
 import { requests } from "../agent";
-import {parseApiErrors} from "../apiUtils";
-import { RDV_ERROR, RDV_LIST_ADD, RDV_LIST_ERROR, RDV_LIST_RECEIVED, RDV_LIST_REQUEST, RDV_RECEIVED, RDV_REQUEST, RDV_UNLOAD, USER_CONFIRMATION_SUCCESS, USER_LOGIN_SUCCESS, USER_LOGOUT, USER_PROFILE_ERROR, USER_PROFILE_RECEIVED, USER_PROFILE_REQUEST, USER_REGISTER_COMPLETE, USER_REGISTER_SUCCESS, USER_SET_ID } from "./constants";
+import { APP_ADD, IMAGE_UPLOADED, IMAGE_UPLOAD_ERROR, IMAGE_UPLOAD_REQUEST, MEDICAL_FORM_UNLOAD, PLACE_LIST_RECEIVED, RDV_ERROR, RDV_LIST_ADD, RDV_LIST_ERROR, RDV_LIST_RECEIVED, RDV_LIST_REQUEST, RDV_RECEIVED, RDV_REQUEST, RDV_UNLOAD, SYMPTOMES_ADD, TRAVEL_ADD, USER_CONFIRMATION_SUCCESS, USER_LOGIN_SUCCESS, USER_LOGOUT, USER_PROFILE_ERROR, USER_PROFILE_RECEIVED, USER_PROFILE_REQUEST, USER_REGISTER_COMPLETE, USER_REGISTER_SUCCESS, USER_SET_ID } from "./constants";
 
 
 export const RdvListRequest = () => ({
@@ -163,3 +162,144 @@ export const userLoginAttempt = (email, identifier) => {
         });
     }
   };
+
+  export const symptomesAdded = (sympId) => {
+    window.localStorage.removeItem("sympId");
+    window.localStorage.setItem("sympId" ,sympId);
+    return {
+      type: SYMPTOMES_ADD,
+      sympId
+    }
+  };
+
+  export const symptomesAdd = (cold, cough, fatigue, diarrhea, bleeding, headache, musclepain, vomiting, hardbreathing, abdominalpain, massgathering, casecontact, fever) => {
+    return (dispatch) => {
+      return requests.post('/symptomes', {cold, cough, fatigue, diarrhea, bleeding, headache, musclepain, vomiting, hardbreathing, abdominalpain, massgathering, casecontact, fever}, false)
+        .then(response => dispatch(symptomesAdded(response.id)))
+        .catch(error => {
+          throw new SubmissionError({
+            _error: 'not valid symptomes'
+          })
+        });
+    }
+  };
+
+  export const travelAdded = (travelId) => {
+    window.localStorage.removeItem("travelId");
+    window.localStorage.setItem("travelId" ,travelId);
+    return {
+      type: TRAVEL_ADD,
+      travelId
+    }
+  };
+
+  export const travelAdd = (flydate, destination) => {
+    return (dispatch) => {
+      return requests.post('/travel', {flydate, destination})
+      .then(response => dispatch(travelAdded(response.id)))
+      .catch(error => {
+        throw new SubmissionError({
+          _error: 'not valid symptomes'
+        })
+      });
+    }
+  }
+
+  export const placeListRecieved = (data) => {
+    const place = [];
+    for (let i = 0; i < data.length; i++) {
+      place.push(data[i].name);
+    }
+    window.localStorage.setItem("places", place);
+  };
+  
+export const placeListError = (error) => ({
+    type: RDV_LIST_ERROR,
+    error
+});
+
+export const placeListFetch = () => {
+    return (dispatch) => {
+        return requests.get(`/places`)
+        .then(response => dispatch(placeListRecieved(response['hydra:member'])))
+        .catch(error => dispatch(placeListError(error)));
+    }
+};
+
+export const AppAdded = (appId) => {
+  return {
+    type: APP_ADD,
+    appId
+  }
+};
+
+export const addRdv = (symp, travel, place) =>{
+  console.log(symp, travel, place);
+  return (dispatch) => {
+    return requests.post('/rdvs', {"symptomes": symp, "travel": travel,"place": place})
+    .then(response => dispatch(AppAdded(response.id)))
+    .catch(error => {
+      throw new SubmissionError({
+        _error: 'not valid RDV'
+      })
+    });
+  }
+}
+
+export const imageUploaded = (data) => {
+  return {
+    type: IMAGE_UPLOADED,
+    image: data
+  }
+};
+
+export const imageUploadRequest = () => {
+  return {
+    type: IMAGE_UPLOAD_REQUEST,
+  }
+};
+
+export const imageUploadError = () => {
+  return {
+    type: IMAGE_UPLOAD_ERROR,
+  }
+};
+
+export const imageUpload = (file) => {
+  return (dispatch) => {
+    dispatch(imageUploadRequest());
+    return requests.upload('/images', file)
+      .then(response => dispatch(imageUploaded(response)))
+      .catch(() => dispatch(imageUploadError))
+  }
+};
+
+export const medicalHistoryAdd = (disease, medecine1, medecine2, images = []) => {
+  return (dispatch) => {
+    return requests.post(
+      '/medical_histories',
+      {
+        disease,
+        medecine1,
+        medecine2,
+        patient: "/api/patients/344",
+        images: images.map(image => `/api/images/${image.id}`)
+      }
+    ).catch((error) => {
+      if (401 === error.response.status) {
+        return dispatch(userLogout());
+      } else if (403 === error.response.status) {
+        throw new SubmissionError({
+          _error: 'You do not have rights to do that!'
+        });
+      }
+      throw new SubmissionError({
+        _error: 'Invalid Response'
+      });
+    })
+  }
+};
+
+export const medHistFormUnload = () => ({
+  type: MEDICAL_FORM_UNLOAD
+});

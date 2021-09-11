@@ -15,7 +15,6 @@ import {
           ...state,
           isFetching: true,
         };
-        console.log(state);
         return state;
       case RDV_LIST_RECEIVED:
         state = {
@@ -23,7 +22,6 @@ import {
           rdv: action.data['hydra:member'],
           isFetching: false
         };
-        console.log(state);
         return state;
       case RDV_LIST_ERROR:
         return {
@@ -36,7 +34,6 @@ import {
           ...state,
           rdv: state.rdv ? state.rdv.concat(action.data) : state.rdv
         };
-        console.log(state);
         return state;
       default:
         return state;

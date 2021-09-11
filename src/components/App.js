@@ -11,6 +11,9 @@ import { userProfileFetch, userSetId, userLogout } from "../actions/actions";
 import RegistrationContainer from "./RegistrationContainer";
 import WelcomeContainer from './WelcomeContainer';
 import MedicalHistoryForm from './MedicalHistoryForm';
+import PaymentForm from './PaymentForm';
+import Admin from './Admin';
+import Tester from './Tester';
 
 const mapStateToProps = state => ({
     ...state.auth
@@ -19,8 +22,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   userProfileFetch, userSetId, userLogout
 };
-   
-
 
 class App extends React.Component {
 
@@ -57,10 +58,13 @@ class App extends React.Component {
               <Switch>
                   <Route path="/welcome" component={WelcomeContainer}/>
                   <Route path="/login" component={LoginForm}/>
-                  <Route path="/medical-history" component={MedicalHistoryForm} />
+                  <Route path="/medicalHistory" component={MedicalHistoryForm} />
                   <Route path="/appointment-form" component={AppointmentForm}/>
                   <Route path="/rdvs/:id" component={AppointmentContainer}/>
                   <Route path="/register" component={RegistrationContainer}/>
+                  <Route path="/pay" component={PaymentForm}/>
+                  <Route path="/admin" component={Admin}/>
+                  <Route path="/tester" component={Tester}/>
                   <Route path="/" component={AppointmentListContainer}/>
               </Switch>
           </div>

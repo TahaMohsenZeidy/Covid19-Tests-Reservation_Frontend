@@ -25,7 +25,6 @@ export default class Header extends React.Component {
     if(histo == "/welcome"){
       welco = true
     }
-    console.log(welco);
     return (
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <Link to="/welcome" className="navbar-brand">

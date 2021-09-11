@@ -17,8 +17,6 @@ class LoginForm extends React.Component {
     
   componentDidUpdate(prevProps) {
     if (prevProps.token !== this.props.token) {
-      console.log("prevpros here", prevProps); 
-      console.log("props here",this.props);
       this.props.history.push('/');
     }
   }

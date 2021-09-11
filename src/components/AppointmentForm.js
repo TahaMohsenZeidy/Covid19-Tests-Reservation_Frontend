@@ -4,23 +4,96 @@ import {connect} from "react-redux";
 import {Redirect} from "react-router";
 import {canWriteAppointment} from "../apiUtils";
 import {renderField} from "../form";
+import {symptomesAdd, placeListFetch, travelAdd, addRdv} from "../actions/actions";
 
-const mapDispatchToProps = {
-
-};
 
 const mapStateToProps = state => ({
-  userData: state.auth.userData,
+    userData: state.auth.userData
 });
+
+const mapDispatchToProps = {
+    symptomesAdd, 
+    travelAdd,
+    addRdv,
+    placeListFetch
+};
 
 class AppointmentForm extends React.Component {
 
+    constructor(props) {
+        super(props);
+        console.log(this.props);
+        this.props.placeListFetch();
+        this.state = { country: 'Tunisia',time: 'choose time' , places: window.localStorage.getItem('places').split(",") };
+        this.handleCountryChange = this.handleCountryChange.bind(this);
+        this.handlePlaceChange = this.handlePlaceChange.bind(this)
+        this.handleTimeChange = this.handleTimeChange.bind(this);
+        this.submitAppointment = this.submitAppointment.bind(this)
+    }
+
+    handleCountryChange(event) {
+        this.setState({country: event.target.value});
+    }
+
+    handlePlaceChange(event) {
+        
+    }
+
+    handleTimeChange(event) {
+        this.setState({time: event.target.value});
+    }
+
+    onSymptomesSubmit (values){
+        this.displayTravel();
+    }
+
+    onTravelSubmit(values){
+        values['destination'] = this.state.country;
+        this.displayPlace();
+        return this.props.travelAdd(values['flydate'], values['destination']);
+    }
+
+    displayTravel(){
+        document.getElementById('tr').style.display="block";
+        document.getElementById('as').disabled = true;
+        var cold = document.getElementById("cold1").checked
+        var cough = document.getElementById("cough1").checked
+        var fatigue = document.getElementById("fat1").checked
+        var diarrhea = document.getElementById("diar1").checked
+        var bleeding = document.getElementById("bleed1").checked
+        var headache = document.getElementById("head1").checked
+        var musclepain = document.getElementById("mp1").checked
+        var vomiting = document.getElementById("vom1").checked
+        var hardbreathing = document.getElementById("hb1").checked
+        var abdominalpain = document.getElementById("ap1").checked
+        var massgathering = document.getElementById("mg1").checked
+        var casecontact = document.getElementById("cc1").checked
+        var fever = document.getElementById("fev1").checked
+        return this.props.symptomesAdd(cold, cough, fatigue, diarrhea, bleeding, headache, musclepain, vomiting, hardbreathing, abdominalpain, massgathering, casecontact, fever ? 38 : 36)
+    }
+    displayPlace(){
+        document.getElementById('pl').style.display = "block";
+        document.getElementById('adt').disabled = true;
+        document.getElementById('skip').disabled = true;
+        this.setState({places: window.localStorage.getItem('places')});
+    }
+
+    submitAppointment(){
+        console.log(window.localStorage.getItem('sympId'), window.localStorage.getItem('travelId'));
+        this.props.history.push("/pay");
+        return this.props.addRdv("/api/symptomes/" + window.localStorage.getItem('sympId'), "/api/travel/" + window.localStorage.getItem('travelId'), "/api/places/416")
+    }
+
     render(){
+        var places = window.localStorage.getItem('places').split(",");
+        const {handleSubmit, addRdv, history} = this.props;
+
         if (!canWriteAppointment(this.props.userData)) {
             return <Redirect to="/login"/>
         }
         return (
             <div class="text-center m-3">
+                <form onSubmit={handleSubmit(this.onSymptomesSubmit.bind(this))}>
                 <div class="card">
                     <div class="card-body text-center">
                         <p class="font-weight-bold">Let's Start With Your Symptomes</p>
@@ -41,7 +114,7 @@ class AppointmentForm extends React.Component {
                                 <div class="col-sm">
                                 Intense Cough: &nbsp;
                                     <div class="custom-control custom-radio custom-control-inline">
-                                        <input type="radio" id="cough1" name="cough1" class="custom-control-input"/>
+                                        <input type="radio" id="cough1" name="cough1" class="custom-control-input" />
                                         <label class="custom-control-label" for="cough1">Yes</label>
                                     </div>
                                     <div class="custom-control custom-radio custom-control-inline">
@@ -164,7 +237,7 @@ class AppointmentForm extends React.Component {
                                     </div>
                                 </div>
                                 <div class="col-sm">
-                                Contacted sick people: &nbsp;
+                                Covid contact: &nbsp;
                                     <div class="custom-control custom-radio custom-control-inline">
                                         <input type="radio" id="cc1" name="cc1" class="custom-control-input"/>
                                         <label class="custom-control-label" for="cc1">Yes</label>
@@ -190,9 +263,12 @@ class AppointmentForm extends React.Component {
                                 </div>
                             </div>
                         </div>
+                        <button type="submit" id="as" class="btn btn-primary m-3">Add Symptomes</button>
                     </div>
-                </div> 
-                <div class="card">
+                </div>
+                </form>
+                <form onSubmit={handleSubmit(this.onTravelSubmit.bind(this))}> 
+                <div id="tr" class="card" style={{display: 'none' }}>
                     <div class="card-body text-center">
                         <p class="font-weight-bold">Information About Your Travel</p>
                         <img src={require('./images/travel.PNG')} />
@@ -202,7 +278,7 @@ class AppointmentForm extends React.Component {
                             </div>
                             <div class="form-group col-md-6">
                                 <label>Destination</label>
-                                <select id="inputState" class="form-control" >
+                                <select id="inputState" class="form-control" value={this.state.country} onChange={this.handleCountryChange} >
                                 <option value="Afghanistan">Afghanistan</option> 
                                 <option value="Albania">Albania</option> 
                                 <option value="Algeria">Algeria</option> 
@@ -446,32 +522,43 @@ class AppointmentForm extends React.Component {
                             </div>
                         </div>
                     </div>
+                    <button type="submit" id="adt" class="btn btn-primary m-3">Add Travel Details</button>
+                    <button type="button" id="skip" onClick={this.displayPlace} class="btn btn-primary m-3">Skip</button>
+
                 </div>
-                <div>
+                </form>
+                
+                <div id="pl" style={{display: 'none' }}>
                     <div class="card">
                         <div class="card-body text-center">
                             <p class="font-weight-bold">Information About Date And Place</p>
                             <img src={require('./images/place.PNG')} />
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label>Places</label>
-                                    <select value="select Place" className="form-control">
-                                        <option value="place">Place</option>
+                                    <label>Hospitals</label>
+                                    <select className="form-control" onChange={this.handlePlaceChange}>
+                                    {places.map(function(place){
+                                            return (<option > {place}</option>);
+                                    })}
                                     </select>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label>Times</label>
-                                    <select value="select time" className="form-control">
-                                        <option value="time">Times</option>
+                                    <select value="select time" value={this.state.time} className="form-control" onChange={this.handleTimeChange}>
+                                        <option value="time1">13:09:00 2021-05-24</option>
+                                        <option value="time2">23:11:00 2021-12-31</option>
+                                        <option value="time3">04:04:00 2021-09-23</option>
+                                        <option value="time4">18:05:00 2021-10-05</option>
                                     </select>
                                 </div>
                             </div>
+                            <button type="button" onClick={ () => this.submitAppointment() } class="btn btn-primary">Add New Appointment</button>
                         </div>
                     </div>
                 </div>
-                <button type="button" class="btn btn-primary">Add New Appointment</button>
+                <div class="w-25 h-100 p-3">
+                </div>
             </div>
-            
         );
     }
 }

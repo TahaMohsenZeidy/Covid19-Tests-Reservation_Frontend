@@ -24,7 +24,6 @@ class RegistrationContainer extends React.Component {
     if (prevProps.confirmationSuccess !== confirmationSuccess && confirmationSuccess) {
       this.timer = setInterval(
         () => {
-          console.log(this.state.counter);
           this.setState(prevState => ({counter: prevState.counter - 1}));
         },
         500
@@ -33,7 +32,7 @@ class RegistrationContainer extends React.Component {
 
     if (prevState.counter !== this.state.counter && this.state.counter <= 0) {
       userRegisterComplete;
-      history.push('/');
+      history.push('/medicalHistory');
     }
   }
 
